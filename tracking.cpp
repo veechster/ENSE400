@@ -67,6 +67,40 @@ int main()
         if (char(key) == 27){
             break;      //If you hit ESC key loop will break.
         }
+		// the following conditionals are for a demo
+		else if (char(key) == 'r'){
+            H_MIN=140;
+			H_MAX=200;
+			S_MIN=0;
+			S_MAX=256;
+			V_MIN=110;
+			V_MAX=150;
+			//If you hit r key update filter.
+        }
+		else if (char(key) == 'b'){
+			H_MIN=50;
+			H_MAX=120;
+			S_MIN=90;
+			S_MAX=165;
+			V_MIN=100;
+			V_MAX=180;
+			//If you hit b key update filter.
+        }
+		else if (char(key) == 'y'){
+            H_MIN=30;
+			H_MAX=65;
+			S_MIN=40;
+			S_MAX=145;
+			V_MIN=200;
+			V_MAX=225;
+			//If you hit y key update filter.
+        }
+		else if (char(key) == '0'){
+            H_MIN=S_MIN=V_MIN=0;
+			H_MAX=S_MAX=V_MAX=256;
+			//If you hit 0 key update filter.
+        }
+
     }
     cvDestroyWindow("Camera_Output"); //Destroy Window
 	cvDestroyWindow("HSV_Image");
