@@ -4,7 +4,6 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/opencv.hpp>
 
-
 //initial min and max HSV filter values.
 //these will be changed using trackbars
 int H_MIN = 0;
