@@ -29,7 +29,21 @@ void createTrackbars(){
     cvCreateTrackbar( "V_MAX", "Adjustors", &V_MAX, V_MAX, 0 );
 }
 
- 
+//draws a crosshair cenetered at (x,y)
+void crosshair(cv::Mat &frame, int x, int y,std::string target)
+{
+	if(y<0 || y>FRAME_HEIGHT || x<0 || x>FRAME_WIDTH)
+	{std::cout<<"error1";return;}
+
+    cv::line(frame,cv::Point(x+20,y),cv::Point(x-20,y),cv::Scalar(0,0,255),2);
+	cv::line(frame,cv::Point(x,y+20),cv::Point(x,y-20),cv::Scalar(0,0,255),2);
+
+	cv::putText(frame,target,cv::Point(x+2,y+15),1,1,cv::Scalar(0,255,255),1);
+	//writes text for each target, change font////////////////////////////////////////////////////////////////////////////////////////////
+
+}
+
+
 using namespace std;
 char key;
 int main()
@@ -55,6 +69,10 @@ int main()
 		
 		capture.read(imgRGB);
 
+		cv::circle(imgRGB,cv::Point(FRAME_WIDTH/2-50,FRAME_HEIGHT/2-50),10,cv::Scalar(0,255,0),2);
+
+		crosshair(imgRGB,FRAME_WIDTH/2, FRAME_HEIGHT/2,"test target");
+
 		imshow("Camera_Output", imgRGB);
 
 		cv::cvtColor(imgRGB,imgHSV,cv::COLOR_BGR2HSV);
@@ -66,39 +84,6 @@ int main()
         key = cvWaitKey(30);     //Capture Keyboard stroke
         if (char(key) == 27){
             break;      //If you hit ESC key loop will break.
-        }
-		// the following conditionals are for a demo
-		else if (char(key) == 'r'){
-            H_MIN=140;
-			H_MAX=200;
-			S_MIN=0;
-			S_MAX=256;
-			V_MIN=110;
-			V_MAX=150;
-			//If you hit r key update filter.
-        }
-		else if (char(key) == 'b'){
-			H_MIN=50;
-			H_MAX=120;
-			S_MIN=90;
-			S_MAX=165;
-			V_MIN=100;
-			V_MAX=180;
-			//If you hit b key update filter.
-        }
-		else if (char(key) == 'y'){
-            H_MIN=30;
-			H_MAX=65;
-			S_MIN=40;
-			S_MAX=145;
-			V_MIN=200;
-			V_MAX=225;
-			//If you hit y key update filter.
-        }
-		else if (char(key) == '0'){
-            H_MIN=S_MIN=V_MIN=0;
-			H_MAX=S_MAX=V_MAX=256;
-			//If you hit 0 key update filter.
         }
 
     }
