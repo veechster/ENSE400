@@ -38,8 +38,10 @@ class Tracking
 {
 	cv::Mat imgHSV;
 	cv::Mat imgBIN;
-	cv::vector<cv::Vec2i> circles;
-	cv::Vec2i point;
+	cv::vector<cv::Vec3f> circles;//////////////needs 3 points
+	cv::Vec3f point;/////////////////////fix this///////////////////////////////////////////////////
+	cv::Point center;
+	int radius;
 	Targets targetList;
 
 public:
