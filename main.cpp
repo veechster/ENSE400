@@ -1,23 +1,21 @@
 #include "header.h"
 #include "targets.h"
 
-using namespace std;
+
 char key;
 bool debuggingmode=false;
 ptime clock;
 
 int main()
 {
-	//INITALIZE EVERYTHING
-	cv::Mat frame;
-	Tracking track;
+	cv::Mat frame;//holds a frame from camera
+	Tracking track;//Used for tracking targets
+
 	cvStartWindowThread();
-	cvNamedWindow("Camera_Output", 1);    //Create window
-	cvNamedWindow("circles", 1);/////////////////////////////////////////////////////////////////////////
+	cvNamedWindow("Camera_Output", 1);//Create window
 	
-    //CvCapture* capture = cvCaptureFromCAM(1);//capture using usb camera
 	cv::VideoCapture capture;
-	capture.open(1);
+	capture.open(1);//capture using usb camera
 	
 	capture.set(CV_CAP_PROP_FRAME_WIDTH,FRAME_WIDTH);
 	capture.set(CV_CAP_PROP_FRAME_HEIGHT,FRAME_HEIGHT);
@@ -25,9 +23,9 @@ int main()
     while(1){ //Create infinte loop for live streaming
 		//set height and width of capture frame
 		
-		capture.read(frame);
+		capture.read(frame);//get a frame
 
-		track.processFrame(frame);
+		track.processFrame(frame);//process the frame looking for targets
 
 		imshow("Camera_Output", frame);
 
@@ -36,9 +34,9 @@ int main()
             break;      //If you hit ESC key loop will break.
         }
 		if (char(key) == 100){ //debugging mode
-			if(debuggingmode==false)
+			if(!debuggingmode)
 				enabledebugging();
-			else if(debuggingmode==true)
+			else if(debuggingmode)
 				disabledebugging(); 
         }
 

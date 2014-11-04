@@ -8,6 +8,8 @@
 #include <opencv2/opencv.hpp>
 
 
+//GLOBAL PROTOTYPES, DEFINITIONS, AND VARIABLES
+
 //width and height of playback screen.
 #define FRAME_WIDTH 640
 #define FRAME_HEIGHT 480
@@ -37,9 +39,9 @@ public:
 
 extern ptime clock;
 
-void createTrackbars();
+void createTrackbars();//for debugging - adjusting filters
 extern void crosshair(cv::Mat&,int,int,std::string);
-void enabledebugging();
-void disabledebugging(); 
+void enabledebugging();//for debugging mode
+void disabledebugging();//for debugging mode
 
 #endif

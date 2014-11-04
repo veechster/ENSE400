@@ -3,20 +3,21 @@
 
 #include "header.h"
 
-int H_MIN = 0;//20
-int H_MAX = 256;//40
-int S_MIN = 0;//50
-int S_MAX = 256;//200
-int V_MIN = 0;//190
-int V_MAX = 256;//256
+//initalize the filtering values
+int H_MIN = 0;
+int H_MAX = 256;
+int S_MIN = 0;
+int S_MAX = 256;
+int V_MIN = 0;
+int V_MAX = 256;
 
 //draws a crosshair cenetered at (x,y)
 void crosshair(cv::Mat &frame, int x, int y,std::string targetName)
 {
 	if(y<0 || y>FRAME_HEIGHT || x<0 || x>FRAME_WIDTH){std::cout<<"error1";return;}
 
-    cv::line(frame,cv::Point(x+20,y),cv::Point(x-20,y),cv::Scalar(0,0,255),2);
-	cv::line(frame,cv::Point(x,y+20),cv::Point(x,y-20),cv::Scalar(0,0,255),2);
+    cv::line(frame,cv::Point(x+15,y),cv::Point(x-15,y),cv::Scalar(0,0,255),2);
+	cv::line(frame,cv::Point(x,y+15),cv::Point(x,y-15),cv::Scalar(0,0,255),2);
 
 	cv::putText(frame,targetName,cv::Point(x+2,y+15),cv::FONT_HERSHEY_SIMPLEX,0.4,cv::Scalar(0,255,0),1);
 }
