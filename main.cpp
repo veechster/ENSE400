@@ -1,46 +1,42 @@
 #include "header.h"
-#include "targets.h"
 
 
-char key;
-bool debuggingmode=false;
-ptime clock;
+
 
 int main()
 {
 	cv::Mat frame;//holds a frame from camera
-	Tracking track;//Used for tracking targets
+	TargettingController controller;
 
 	cvStartWindowThread();
-	cvNamedWindow("Camera_Output", 1);//Create window
+	cvNamedWindow("Camera_Output", cv::WINDOW_AUTOSIZE);//Create window
 	
 	cv::VideoCapture capture;
-	capture.open(1);//capture using usb camera
+	capture.open(1);//capture using usb camera (not default)
 	
-	capture.set(CV_CAP_PROP_FRAME_WIDTH,FRAME_WIDTH);
+	capture.set(CV_CAP_PROP_FRAME_WIDTH,FRAME_WIDTH);//set height and width of capture frame
 	capture.set(CV_CAP_PROP_FRAME_HEIGHT,FRAME_HEIGHT);
 
-    while(1){ //Create infinte loop for live streaming
-		//set height and width of capture frame
-		
+    while(1)//Create infinte loop for live streaming
+	{ 
 		capture.read(frame);//get a frame
 
-		track.processFrame(frame);//process the frame looking for targets
+		controller.processFrame(frame);//process the frame looking for targets
 
 		imshow("Camera_Output", frame);
 
-        key = cvWaitKey(30);     //Capture Keyboard stroke
-        if (char(key) == 27){
-            break;      //If you hit ESC key loop will break.
-        }
-		if (char(key) == 100){ //debugging mode
-			if(!debuggingmode)
-				enabledebugging();
-			else if(debuggingmode)
-				disabledebugging(); 
+        controller.key = cvWaitKey(30);//Capture Keyboard stroke
+        if (char(controller.key) == 27)
+            break;//If you hit ESC key loop will break.
+		else if (char(controller.key) == 100)//enable debugging mode
+		{ 
+			if(!controller.debuggingModeActive())
+				controller.enabledebugging();
+			else
+				controller.disabledebugging(); 
         }
 
-		clock.tick();
+		controller.clock.tick();
     }
     cvDestroyWindow("Camera_Output"); //Destroy Window
 

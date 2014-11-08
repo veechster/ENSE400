@@ -1,16 +1,20 @@
 #ifndef TARGETS_CPP
 #define TARGETS_CPP
 
-#include "targets.h"
+#include "header.h"
 
-Targets::Targets(){}
-void Targets::clean(){}
-void Targets::add(Target){}
-void Targets::add(int,int,int,std::string){}
-Target Targets::getTarget(){return Target();}
-bool Targets::removeTarget(Target){return 0;}
-Target Targets::search(int,int){return Target();}
-std::string Targets::getFoundTargets(){return "0";}
+TargettingController::TargettingController(){}
+void TargettingController::killTarget(){}
+
+
+TargetList::TargetList(){}
+void TargetList::clean(){}
+void TargetList::add(Target){}
+void TargetList::add(int,int,int,std::string){}
+Target TargetList::getTarget(){return Target();}
+bool TargetList::removeTarget(Target){return 0;}
+Target TargetList::search(int,int){return Target();}
+std::string TargetList::getFoundTargets(){return "0";}
 
 //function looks for the current position relative to the past poitions.
 //if it is a position of this target, it is atomatically added
@@ -31,19 +35,21 @@ bool Target::isTarget(int a, int b, int r,long unsigned time)
 
 
 //function processes frame and updates target datatype
-void Tracking::processFrame(cv::Mat &imgRGB)
+void TargettingController::processFrame(cv::Mat &imgRGB)
 {
-	crosshair(imgRGB,FRAME_WIDTH/2, FRAME_HEIGHT/2,"center");
+	debuggingTools.crosshair(imgRGB,FRAME_WIDTH/2, FRAME_HEIGHT/2,0,cv::Vec3i(100,100,100),"center");
 
 	//create HSV image for color filtering
-	cv::cvtColor(imgRGB,imgHSV,cv::COLOR_BGR2HSV);
-	inRange(imgHSV,cv::Scalar(H_MIN,S_MIN,V_MIN),cv::Scalar(H_MAX,S_MAX,V_MAX),imgBIN);//creates binary threshold image
+	cv::cvtColor(imgRGB,debuggingTools.imgHSV,cv::COLOR_BGR2HSV);
+	inRange(debuggingTools.imgHSV,cv::Scalar(debuggingTools.H_MIN,debuggingTools.S_MIN,debuggingTools.V_MIN),cv::Scalar(debuggingTools.H_MAX,debuggingTools.S_MAX,debuggingTools.V_MAX),debuggingTools.imgBIN);//creates binary threshold image
 
 	//blur image so HoughCircles argorithm doesnt shit itself
-	cv::GaussianBlur( imgBIN, imgBIN, cv::Size(13, 13), 2, 2 );
-	if(!debuggingmode)
-		HoughCircles(imgBIN, this->circle, CV_HOUGH_GRADIENT, 2, 100, 80, 110, 0, 0 );//if HoughCircles is running while tuning, it shits itself
+	cv::GaussianBlur(debuggingTools.imgBIN, debuggingTools.imgBIN, cv::Size(13, 13), 2, 2 );
+	if(!debuggingModeActive())
+		HoughCircles(debuggingTools.imgBIN, this->debuggingTools.circle, CV_HOUGH_GRADIENT, debuggingTools.dp, debuggingTools.min_dist, debuggingTools.param_1, debuggingTools.param_2, debuggingTools.min_radius, debuggingTools.max_radius );//if HoughCircles is running while tuning, it shits itself
 
+
+	/*
 	//TEMPORARY CODE FOR DEMO
 	for( size_t i = 0; i < circle.size(); i++ )
     {
@@ -54,6 +60,7 @@ void Tracking::processFrame(cv::Mat &imgRGB)
 	for( size_t i = 0; i < circle.size(); i++ )
 		circle.pop_back();
 	//END OF DEMO SNIPPET
+	*/
 
 
 	/*CODE FOR ADDING TARGETS TO ADT
@@ -83,14 +90,15 @@ void Tracking::processFrame(cv::Mat &imgRGB)
 	*/
 		
 
-	if(debuggingmode)//DEBUGGING MODE
+	if(debuggingModeActive())//DEBUGGING MODE
 	{
-		imshow("HSV_Image", imgHSV);
-		imshow("Editted_Image", imgBIN);
+		imshow("HSV_Image", debuggingTools.imgHSV);
+		imshow("Editted_Image", debuggingTools.imgBIN);
 	}
 
-	cv::circle(imgRGB,cv::Point(FRAME_WIDTH/2-25,FRAME_HEIGHT/2-25),5,cv::Scalar(0,255,0),1);//laser target
-
+	//DRAW LASER TARGET ON SCREEN
+	cv::circle(imgRGB,cv::Point(FRAME_WIDTH/2-25,FRAME_HEIGHT/2-25),5,cv::Scalar(0,255,0),1);//(where the laser is aimed)
+	
 	return;
 }
 
